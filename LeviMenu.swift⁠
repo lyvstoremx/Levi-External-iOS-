@@ -1,0 +1,113 @@
+import SwiftUI
+
+struct LeviExternalMenu: View {
+    @State private var licenseKey: String = ""
+    @State private var isActivated: Bool = false
+    @State private var timeRemaining: String = "30 días 00h 00m"
+    
+    // Switches de funciones
+    @State private var wallhack: Bool = false
+    @State private var antenna: Bool = false
+    @State private var aimbotHead: Bool = false
+    @State private var aimbotFov: Bool = false
+    
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                // Header LEVI EXTERNAL
+                Text("LEVI EXTERNAL")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color(hex: "#00D2FF"))
+                    .shadow(color: Color(hex: "#00D2FF"), radius: 10)
+                
+                if !isActivated {
+                    // Pantalla de Login / Key
+                    VStack(spacing: 15) {
+                        SecureField("Ingresa tu Key de Telegram...", text: $licenseKey)
+                            .padding()
+                            .background(Color.white.opacity(0.1))
+                            .cornerRadius(10)
+                            .foregroundColor(.white)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(hex: "#00D2FF"), lineWidth: 1))
+                        
+                        Button(action: {
+                            if !licenseKey.isEmpty { isActivated = true }
+                        }) {
+                            Text("ACTIVAR LICENCIA")
+                                .fontWeight(.bold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color(hex: "#00D2FF"))
+                                .foregroundColor(.black)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .padding()
+                } else {
+                    // Menú Principal
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("Tiempo restante: \(timeRemaining)")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            
+                            // Botón de Lanzamiento
+                            Button(action: {
+                                if let url = URL(string: "freefiremax://"), UIApplication.shared.canOpenURL(url) {
+                                    UIApplication.shared.open(url)
+                                }
+                            }) {
+                                HStack {
+                                    Image(systemName: "play.fill")
+                                    Text("🚀 ABRIR FREE FIRE MAX")
+                                }
+                                .fontWeight(.bold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color(hex: "#00D2FF"))
+                                .foregroundColor(.black)
+                                .cornerRadius(10)
+                            }
+                            
+                            Divider().background(Color(hex: "#00D2FF"))
+                            
+                            // Sección Visuales
+                            Text("VISUALES")
+                                .font(.headline)
+                                .foregroundColor(Color(hex: "#00D2FF"))
+                            
+                            Toggle("Wallhack Holograma", isOn: $wallhack)
+                            Toggle("Antena HD", isOn: $antenna)
+                            
+                            Divider().background(Color(hex: "#00D2FF"))
+                            
+                            // Sección Aimbots
+                            Text("AIMBOTS")
+                                .font(.headline)
+                                .foregroundColor(Color(hex: "#00D2FF"))
+                            
+                            Toggle("Aimbot Cabeza (100%)", isOn: $aimbotHead)
+                            Toggle("FOV Aimbot Ajustable", isOn: $aimbotFov)
+                        }
+                        .foregroundColor(.white)
+                        .padding()
+                    }
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+// Extensión para colores HEX
+extension Color {
+    init(hex: String) {
+        let scanner = Scanner(string: hex.replacingOccurrences(of: "#", with: ""))
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+        self.init(red: Double((rgb >> 16) & 0xFF) / 255.0, green: Double((rgb >> 8) & 0xFF) / 255.0, blue: Double(rgb & 0xFF) / 255.0)
+    }
+}
